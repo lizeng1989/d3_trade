@@ -1,0 +1,72 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<script src="http://www.d3plus.org/js/d3.js"></script>
+<script src="http://www.d3plus.org/js/d3plus.js"></script>
+<style>
+
+
+
+</style>
+<form>
+  <label><input type="radio" name="mode" value="export" checked> 出口</label>
+  <label><input type="radio" name="mode" value="import"> 進口</label>
+</form>
+<div id="viz"></div>
+<script>
+	d3.csv("trade.csv", function(data) {
+		    console.log(data);
+	});
+	var trade_data=[
+	{"name": "香港","export": 101013,"import":2807,"group":"亞洲"},
+	{"name": "印尼","export":7037,"import":10386,"group":"亞洲"},
+	{"name": "日本","export":47805,"import":105537,"group":"亞洲"},
+ 　	{"name": "韓國","export":28705,"import":33812,"group":"亞洲"},
+ 　	{"name": "中國大陸","export":182100,"import":121294,"group":"亞洲"},
+ 　	{"name": "馬來西亞","export":18901,"import":16056,"group":"亞洲"},
+ 　	{"name": "新加坡","export":40604,"import":15662,"group":"亞洲"},
+ 　	{"name": "泰國","export":13137,"import":10127,"group":"亞洲"},
+ 　	{"name": "越南","export":24542,"import":6481,"group":"亞洲"},
+
+ 　	{"name": "科威特","export":451,"import":9005,"group":"中東"},
+ 　	{"name": "沙烏地阿拉伯","export":4285,"import":17147,"group":"中東"},
+
+ 　	{"name": "法國","export":3640,"import":7599,"group":"歐洲"},
+ 　	{"name": "德國","export":16796,"import":21211,"group":"歐洲"},
+ 　	{"name": "義大利","export":5676,"import":6012,"group":"歐洲"},
+ 　	{"name": "英國,","export":10297,"import":4761,"group":"歐洲"},
+
+ 　	{"name": "奈及利亞","export":402,"import":2,"group":"非洲"},
+
+ 　	{"name": "加拿大","export":5985,"import":3005,"group":"北美洲"},
+ 　	{"name": "美國","export":93121,"import":71826,"group":"北美洲"},
+
+ 　	{"name": "墨西哥","export":5940,"import":1731,"group":"中美洲"},
+ 　	{"name": "巴拿馬","export":377,"import":76,"group":"中美洲"},
+
+ 　	{"name": "阿根廷","export":776,"import":277,"group":"南美洲"},
+ 　	{"name": "巴西","export":2639,"import":5826,"group":"南美洲"},
+
+ 　	{"name": "澳大利亞","export":7041,"import":13439,"group":"大洋洲"},
+ 　	{"name": "紐西蘭","export":1088,"import":1629,"group":"大洋洲"}
+	]
+	var value = "export";
+	var initial_visualization = d3plus.viz()
+    .container("#viz")
+    .data(trade_data)
+    .type("tree_map")
+    .id(["group","name"])
+    .size(value)
+    .draw()
+	d3.selectAll("input").on("change", function change() {
+    var value = this.value 
+	
+	var toggle_visualization = d3plus.viz()
+    .container("#viz")
+    .data(trade_data)
+    .type("tree_map")
+    .id(["group","name"])
+    .size(value)
+    .draw()
+});
+</script>
