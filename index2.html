@@ -132,7 +132,12 @@ function changeYear(year) {
 };
 function changeMonth(month) {
 	rMonth = month;
-	date="Y"+rYear+"M"+rMonth;
+	if(rMonth<10){
+		date="Y"+rYear+"M0"+rMonth;
+	}
+	else{
+		date="Y"+rYear+"M"+rMonth;
+	}
 	if(type=="export")
 	{
 		for (var i = 0; i < export_data.length; i++) {
