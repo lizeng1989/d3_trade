@@ -1,0 +1,586 @@
+<!doctype html>
+<meta charset="utf-8">
+<script type="text/javascript" src="jquery-1.10.2.js"></script>
+<script type="text/javascript" src="jquery-ui.js"></script>
+<link rel="stylesheet" href="jquery-ui.css">
+<script src="http://www.d3plus.org/js/d3.js"></script>
+<script src="http://www.d3plus.org/js/d3plus.js"></script>
+
+<div style="width: 50%; margin-left:25%;">
+	<p>
+	<label for="year">年份：</label>
+	<input type="text" id="year" readonly style="font-size: 24px; border:0; color:#f6931f; font-weight:bold;">
+	</p>
+	<div id="slider-range-min-year"></div>
+	<p>
+	<label for="month">月份：</label>
+	<input type="text" id="month" readonly style="font-size: 24px; border:0; color:#f6931f; font-weight:bold;">
+	</p>
+	<div id="slider-range-min-month"></div>
+</div>
+<form>
+  <label><input type="radio" name="mode" value="export" checked> 出口</label>
+  <label><input type="radio" name="mode" value="import"> 進口</label>
+</form>
+<div id="viz"></div>
+<script>
+	d3.csv("trade_export.csv", function(export_data) {
+	d3.csv("trade_import.csv", function(import_data) {
+	console.log(export_data);
+	createTimeLine();
+	var date="Y2015M12";
+	var rYear=2015;
+	var rMonth=12;
+	var type="export";
+	/*for (var i = 0; i < export_data.length; i++) {
+		export_data[i].Y2000M01 = parseInt(export_data[i].Y2000M01);
+        export_data[i].Y2000M02 = parseInt(export_data[i].Y2000M02);
+        export_data[i].Y2000M03 = parseInt(export_data[i].Y2000M03);
+        export_data[i].Y2000M04 = parseInt(export_data[i].Y2000M04);
+        export_data[i].Y2000M05 = parseInt(export_data[i].Y2000M05);
+        export_data[i].Y2000M06 = parseInt(export_data[i].Y2000M06);
+        export_data[i].Y2000M07 = parseInt(export_data[i].Y2000M07);
+        export_data[i].Y2000M08 = parseInt(export_data[i].Y2000M08);
+        export_data[i].Y2000M09 = parseInt(export_data[i].Y2000M09);
+        export_data[i].Y2000M10 = parseInt(export_data[i].Y2000M10);
+        export_data[i].Y2000M11 = parseInt(export_data[i].Y2000M11);
+        export_data[i].Y2000M12 = parseInt(export_data[i].Y2000M12);
+        export_data[i].Y2001M01 = parseInt(export_data[i].Y2001M01);
+        export_data[i].Y2001M02 = parseInt(export_data[i].Y2001M02);
+        export_data[i].Y2001M03 = parseInt(export_data[i].Y2001M03);
+        export_data[i].Y2001M04 = parseInt(export_data[i].Y2001M04);
+        export_data[i].Y2001M05 = parseInt(export_data[i].Y2001M05);
+        export_data[i].Y2001M06 = parseInt(export_data[i].Y2001M06);
+        export_data[i].Y2001M07 = parseInt(export_data[i].Y2001M07);
+        export_data[i].Y2001M08 = parseInt(export_data[i].Y2001M08);
+        export_data[i].Y2001M09 = parseInt(export_data[i].Y2001M09);
+        export_data[i].Y2001M10 = parseInt(export_data[i].Y2001M10);
+        export_data[i].Y2001M11 = parseInt(export_data[i].Y2001M11);
+        export_data[i].Y2001M12 = parseInt(export_data[i].Y2001M12);
+	    export_data[i].Y2002M01 = parseInt(export_data[i].Y2002M01);
+        export_data[i].Y2002M02 = parseInt(export_data[i].Y2002M02);
+        export_data[i].Y2002M03 = parseInt(export_data[i].Y2002M03);
+        export_data[i].Y2002M04 = parseInt(export_data[i].Y2002M04);
+        export_data[i].Y2002M05 = parseInt(export_data[i].Y2002M05);
+        export_data[i].Y2002M06 = parseInt(export_data[i].Y2002M06);
+        export_data[i].Y2002M07 = parseInt(export_data[i].Y2002M07);
+        export_data[i].Y2002M08 = parseInt(export_data[i].Y2002M08);
+        export_data[i].Y2002M09 = parseInt(export_data[i].Y2002M09);
+        export_data[i].Y2002M10 = parseInt(export_data[i].Y2002M10);
+        export_data[i].Y2002M11 = parseInt(export_data[i].Y2002M11);
+        export_data[i].Y2002M12 = parseInt(export_data[i].Y2002M12);
+        export_data[i].Y2003M01 = parseInt(export_data[i].Y2003M01);
+        export_data[i].Y2003M02 = parseInt(export_data[i].Y2003M02);
+        export_data[i].Y2003M03 = parseInt(export_data[i].Y2003M03);
+        export_data[i].Y2003M04 = parseInt(export_data[i].Y2003M04);
+        export_data[i].Y2003M05 = parseInt(export_data[i].Y2003M05);
+        export_data[i].Y2003M06 = parseInt(export_data[i].Y2003M06);
+        export_data[i].Y2003M07 = parseInt(export_data[i].Y2003M07);
+        export_data[i].Y2003M08 = parseInt(export_data[i].Y2003M08);
+        export_data[i].Y2003M09 = parseInt(export_data[i].Y2003M09);
+        export_data[i].Y2003M10 = parseInt(export_data[i].Y2003M10);
+        export_data[i].Y2003M11 = parseInt(export_data[i].Y2003M11);
+        export_data[i].Y2003M12 = parseInt(export_data[i].Y2003M12);
+        export_data[i].Y2004M01 = parseInt(export_data[i].Y2004M01);
+        export_data[i].Y2004M02 = parseInt(export_data[i].Y2004M02);
+        export_data[i].Y2004M03 = parseInt(export_data[i].Y2004M03);
+        export_data[i].Y2004M04 = parseInt(export_data[i].Y2004M04);
+        export_data[i].Y2004M05 = parseInt(export_data[i].Y2004M05);
+        export_data[i].Y2004M06 = parseInt(export_data[i].Y2004M06);
+        export_data[i].Y2004M07 = parseInt(export_data[i].Y2004M07);
+        export_data[i].Y2004M08 = parseInt(export_data[i].Y2004M08);
+        export_data[i].Y2004M09 = parseInt(export_data[i].Y2004M09);
+        export_data[i].Y2004M10 = parseInt(export_data[i].Y2004M10);
+        export_data[i].Y2004M11 = parseInt(export_data[i].Y2004M11);
+        export_data[i].Y2004M12 = parseInt(export_data[i].Y2004M12);
+        export_data[i].Y2005M01 = parseInt(export_data[i].Y2005M01);
+        export_data[i].Y2005M02 = parseInt(export_data[i].Y2005M02);
+        export_data[i].Y2005M03 = parseInt(export_data[i].Y2005M03);
+        export_data[i].Y2005M04 = parseInt(export_data[i].Y2005M04);
+        export_data[i].Y2005M05 = parseInt(export_data[i].Y2005M05);
+        export_data[i].Y2005M06 = parseInt(export_data[i].Y2005M06);
+        export_data[i].Y2005M07 = parseInt(export_data[i].Y2005M07);
+        export_data[i].Y2005M08 = parseInt(export_data[i].Y2005M08);
+        export_data[i].Y2005M09 = parseInt(export_data[i].Y2005M09);
+        export_data[i].Y2005M10 = parseInt(export_data[i].Y2005M10);
+        export_data[i].Y2005M11 = parseInt(export_data[i].Y2005M11);
+        export_data[i].Y2005M12 = parseInt(export_data[i].Y2005M12);
+		export_data[i].Y2006M01 = parseInt(export_data[i].Y2006M01);
+        export_data[i].Y2006M02 = parseInt(export_data[i].Y2006M02);
+        export_data[i].Y2006M03 = parseInt(export_data[i].Y2006M03);
+        export_data[i].Y2006M04 = parseInt(export_data[i].Y2006M04);
+        export_data[i].Y2006M05 = parseInt(export_data[i].Y2006M05);
+        export_data[i].Y2006M06 = parseInt(export_data[i].Y2006M06);
+        export_data[i].Y2006M07 = parseInt(export_data[i].Y2006M07);
+        export_data[i].Y2006M08 = parseInt(export_data[i].Y2006M08);
+        export_data[i].Y2006M09 = parseInt(export_data[i].Y2006M09);
+        export_data[i].Y2006M10 = parseInt(export_data[i].Y2006M10);
+        export_data[i].Y2006M11 = parseInt(export_data[i].Y2006M11);
+        export_data[i].Y2006M12 = parseInt(export_data[i].Y2006M12);
+        export_data[i].Y2007M01 = parseInt(export_data[i].Y2007M01);
+        export_data[i].Y2007M02 = parseInt(export_data[i].Y2007M02);
+        export_data[i].Y2007M03 = parseInt(export_data[i].Y2007M03);
+        export_data[i].Y2007M04 = parseInt(export_data[i].Y2007M04);
+        export_data[i].Y2007M05 = parseInt(export_data[i].Y2007M05);
+        export_data[i].Y2007M06 = parseInt(export_data[i].Y2007M06);
+        export_data[i].Y2007M07 = parseInt(export_data[i].Y2007M07);
+        export_data[i].Y2007M08 = parseInt(export_data[i].Y2007M08);
+        export_data[i].Y2007M09 = parseInt(export_data[i].Y2007M09);
+        export_data[i].Y2007M10 = parseInt(export_data[i].Y2007M10);
+		export_data[i].Y2008M01 = parseInt(export_data[i].Y2008M01);
+        export_data[i].Y2008M02 = parseInt(export_data[i].Y2008M02);
+        export_data[i].Y2008M03 = parseInt(export_data[i].Y2008M03);
+        export_data[i].Y2008M04 = parseInt(export_data[i].Y2008M04);
+        export_data[i].Y2008M05 = parseInt(export_data[i].Y2008M05);
+        export_data[i].Y2008M06 = parseInt(export_data[i].Y2008M06);
+        export_data[i].Y2008M07 = parseInt(export_data[i].Y2008M07);
+        export_data[i].Y2008M08 = parseInt(export_data[i].Y2008M08);
+        export_data[i].Y2008M09 = parseInt(export_data[i].Y2008M09);
+        export_data[i].Y2008M10 = parseInt(export_data[i].Y2008M10);
+        export_data[i].Y2008M11 = parseInt(export_data[i].Y2008M11);
+        export_data[i].Y2008M12 = parseInt(export_data[i].Y2008M12);
+        export_data[i].Y2009M01 = parseInt(export_data[i].Y2009M01);
+        export_data[i].Y2009M02 = parseInt(export_data[i].Y2009M02);
+        export_data[i].Y2009M03 = parseInt(export_data[i].Y2009M03);
+        export_data[i].Y2009M04 = parseInt(export_data[i].Y2009M04);
+        export_data[i].Y2009M05 = parseInt(export_data[i].Y2009M05);
+        export_data[i].Y2009M06 = parseInt(export_data[i].Y2009M06);
+        export_data[i].Y2009M07 = parseInt(export_data[i].Y2009M07);
+        export_data[i].Y2009M08 = parseInt(export_data[i].Y2009M08);
+        export_data[i].Y2009M09 = parseInt(export_data[i].Y2009M09);
+        export_data[i].Y2009M10 = parseInt(export_data[i].Y2009M10);
+        export_data[i].Y2009M11 = parseInt(export_data[i].Y2009M11);
+        export_data[i].Y2009M12 = parseInt(export_data[i].Y2009M12);
+        export_data[i].Y2010M01 = parseInt(export_data[i].Y2010M01);
+        export_data[i].Y2010M02 = parseInt(export_data[i].Y2010M02);
+        export_data[i].Y2010M03 = parseInt(export_data[i].Y2010M03);
+        export_data[i].Y2010M04 = parseInt(export_data[i].Y2010M04);
+        export_data[i].Y2010M05 = parseInt(export_data[i].Y2010M05);
+        export_data[i].Y2010M06 = parseInt(export_data[i].Y2010M06);
+        export_data[i].Y2010M07 = parseInt(export_data[i].Y2010M07);
+        export_data[i].Y2010M08 = parseInt(export_data[i].Y2010M08);
+        export_data[i].Y2010M09 = parseInt(export_data[i].Y2010M09);
+        export_data[i].Y2010M10 = parseInt(export_data[i].Y2010M10);
+        export_data[i].Y2010M11 = parseInt(export_data[i].Y2010M11);
+        export_data[i].Y2010M12 = parseInt(export_data[i].Y2010M12);
+        export_data[i].Y2011M01 = parseInt(export_data[i].Y2011M01);
+        export_data[i].Y2011M02 = parseInt(export_data[i].Y2011M02);
+        export_data[i].Y2011M03 = parseInt(export_data[i].Y2011M03);
+        export_data[i].Y2011M04 = parseInt(export_data[i].Y2011M04);
+        export_data[i].Y2011M05 = parseInt(export_data[i].Y2011M05);
+        export_data[i].Y2011M06 = parseInt(export_data[i].Y2011M06);
+        export_data[i].Y2011M07 = parseInt(export_data[i].Y2011M07);
+        export_data[i].Y2011M08 = parseInt(export_data[i].Y2011M08);
+        export_data[i].Y2011M09 = parseInt(export_data[i].Y2011M09);
+        export_data[i].Y2011M10 = parseInt(export_data[i].Y2011M10);
+        export_data[i].Y2011M11 = parseInt(export_data[i].Y2011M11);
+        export_data[i].Y2011M12 = parseInt(export_data[i].Y2011M12);
+	    export_data[i].Y2012M01 = parseInt(export_data[i].Y2012M01);
+        export_data[i].Y2012M02 = parseInt(export_data[i].Y2012M02);
+        export_data[i].Y2012M03 = parseInt(export_data[i].Y2012M03);
+        export_data[i].Y2012M04 = parseInt(export_data[i].Y2012M04);
+        export_data[i].Y2012M05 = parseInt(export_data[i].Y2012M05);
+        export_data[i].Y2012M06 = parseInt(export_data[i].Y2012M06);
+        export_data[i].Y2012M07 = parseInt(export_data[i].Y2012M07);
+        export_data[i].Y2012M08 = parseInt(export_data[i].Y2012M08);
+        export_data[i].Y2012M09 = parseInt(export_data[i].Y2012M09);
+        export_data[i].Y2012M10 = parseInt(export_data[i].Y2012M10);
+        export_data[i].Y2012M11 = parseInt(export_data[i].Y2012M11);
+        export_data[i].Y2012M12 = parseInt(export_data[i].Y2012M12);
+        export_data[i].Y2013M01 = parseInt(export_data[i].Y2013M01);
+        export_data[i].Y2013M02 = parseInt(export_data[i].Y2013M02);
+        export_data[i].Y2013M03 = parseInt(export_data[i].Y2013M03);
+        export_data[i].Y2013M04 = parseInt(export_data[i].Y2013M04);
+        export_data[i].Y2013M05 = parseInt(export_data[i].Y2013M05);
+        export_data[i].Y2013M06 = parseInt(export_data[i].Y2013M06);
+        export_data[i].Y2013M07 = parseInt(export_data[i].Y2013M07);
+        export_data[i].Y2013M08 = parseInt(export_data[i].Y2013M08);
+        export_data[i].Y2013M09 = parseInt(export_data[i].Y2013M09);
+        export_data[i].Y2013M10 = parseInt(export_data[i].Y2013M10);
+        export_data[i].Y2013M11 = parseInt(export_data[i].Y2013M11);
+        export_data[i].Y2013M12 = parseInt(export_data[i].Y2013M12);
+        export_data[i].Y2014M01 = parseInt(export_data[i].Y2014M01);
+        export_data[i].Y2014M02 = parseInt(export_data[i].Y2014M02);
+        export_data[i].Y2014M03 = parseInt(export_data[i].Y2014M03);
+        export_data[i].Y2014M04 = parseInt(export_data[i].Y2014M04);
+        export_data[i].Y2014M05 = parseInt(export_data[i].Y2014M05);
+        export_data[i].Y2014M06 = parseInt(export_data[i].Y2014M06);
+        export_data[i].Y2014M07 = parseInt(export_data[i].Y2014M07);
+        export_data[i].Y2014M08 = parseInt(export_data[i].Y2014M08);
+        export_data[i].Y2014M09 = parseInt(export_data[i].Y2014M09);
+        export_data[i].Y2014M10 = parseInt(export_data[i].Y2014M10);
+        export_data[i].Y2014M11 = parseInt(export_data[i].Y2014M11);
+        export_data[i].Y2014M12 = parseInt(export_data[i].Y2014M12);
+        export_data[i].Y2015M01 = parseInt(export_data[i].Y2015M01);
+        export_data[i].Y2015M02 = parseInt(export_data[i].Y2015M02);
+        export_data[i].Y2015M03 = parseInt(export_data[i].Y2015M03);
+        export_data[i].Y2015M04 = parseInt(export_data[i].Y2015M04);
+        export_data[i].Y2015M05 = parseInt(export_data[i].Y2015M05);
+        export_data[i].Y2015M06 = parseInt(export_data[i].Y2015M06);
+        export_data[i].Y2015M07 = parseInt(export_data[i].Y2015M07);
+        export_data[i].Y2015M08 = parseInt(export_data[i].Y2015M08);
+        export_data[i].Y2015M09 = parseInt(export_data[i].Y2015M09);
+        export_data[i].Y2015M10 = parseInt(export_data[i].Y2015M10);
+        export_data[i].Y2015M11 = parseInt(export_data[i].Y2015M11);
+        export_data[i].Y2015M12 = parseInt(export_data[i].Y2015M12);	
+		export_data[i][date] = parseInt(export_data[i][date]);		
+	}
+	for (var i = 0; i < import_data.length; i++) {
+		import_data[i].Y2000M01 = parseInt(import_data[i].Y2000M01);
+        import_data[i].Y2000M02 = parseInt(import_data[i].Y2000M02);
+        import_data[i].Y2000M03 = parseInt(import_data[i].Y2000M03);
+        import_data[i].Y2000M04 = parseInt(import_data[i].Y2000M04);
+        import_data[i].Y2000M05 = parseInt(import_data[i].Y2000M05);
+        import_data[i].Y2000M06 = parseInt(import_data[i].Y2000M06);
+        import_data[i].Y2000M07 = parseInt(import_data[i].Y2000M07);
+        import_data[i].Y2000M08 = parseInt(import_data[i].Y2000M08);
+        import_data[i].Y2000M09 = parseInt(import_data[i].Y2000M09);
+        import_data[i].Y2000M10 = parseInt(import_data[i].Y2000M10);
+        import_data[i].Y2000M11 = parseInt(import_data[i].Y2000M11);
+        import_data[i].Y2000M12 = parseInt(import_data[i].Y2000M12);
+        import_data[i].Y2001M01 = parseInt(import_data[i].Y2001M01);
+        import_data[i].Y2001M02 = parseInt(import_data[i].Y2001M02);
+        import_data[i].Y2001M03 = parseInt(import_data[i].Y2001M03);
+        import_data[i].Y2001M04 = parseInt(import_data[i].Y2001M04);
+        import_data[i].Y2001M05 = parseInt(import_data[i].Y2001M05);
+        import_data[i].Y2001M06 = parseInt(import_data[i].Y2001M06);
+        import_data[i].Y2001M07 = parseInt(import_data[i].Y2001M07);
+        import_data[i].Y2001M08 = parseInt(import_data[i].Y2001M08);
+        import_data[i].Y2001M09 = parseInt(import_data[i].Y2001M09);
+        import_data[i].Y2001M10 = parseInt(import_data[i].Y2001M10);
+        import_data[i].Y2001M11 = parseInt(import_data[i].Y2001M11);
+        import_data[i].Y2001M12 = parseInt(import_data[i].Y2001M12);
+	    import_data[i].Y2002M01 = parseInt(import_data[i].Y2002M01);
+        import_data[i].Y2002M02 = parseInt(import_data[i].Y2002M02);
+        import_data[i].Y2002M03 = parseInt(import_data[i].Y2002M03);
+        import_data[i].Y2002M04 = parseInt(import_data[i].Y2002M04);
+        import_data[i].Y2002M05 = parseInt(import_data[i].Y2002M05);
+        import_data[i].Y2002M06 = parseInt(import_data[i].Y2002M06);
+        import_data[i].Y2002M07 = parseInt(import_data[i].Y2002M07);
+        import_data[i].Y2002M08 = parseInt(import_data[i].Y2002M08);
+        import_data[i].Y2002M09 = parseInt(import_data[i].Y2002M09);
+        import_data[i].Y2002M10 = parseInt(import_data[i].Y2002M10);
+        import_data[i].Y2002M11 = parseInt(import_data[i].Y2002M11);
+        import_data[i].Y2002M12 = parseInt(import_data[i].Y2002M12);
+        import_data[i].Y2003M01 = parseInt(import_data[i].Y2003M01);
+        import_data[i].Y2003M02 = parseInt(import_data[i].Y2003M02);
+        import_data[i].Y2003M03 = parseInt(import_data[i].Y2003M03);
+        import_data[i].Y2003M04 = parseInt(import_data[i].Y2003M04);
+        import_data[i].Y2003M05 = parseInt(import_data[i].Y2003M05);
+        import_data[i].Y2003M06 = parseInt(import_data[i].Y2003M06);
+        import_data[i].Y2003M07 = parseInt(import_data[i].Y2003M07);
+        import_data[i].Y2003M08 = parseInt(import_data[i].Y2003M08);
+        import_data[i].Y2003M09 = parseInt(import_data[i].Y2003M09);
+        import_data[i].Y2003M10 = parseInt(import_data[i].Y2003M10);
+        import_data[i].Y2003M11 = parseInt(import_data[i].Y2003M11);
+        import_data[i].Y2003M12 = parseInt(import_data[i].Y2003M12);
+        import_data[i].Y2004M01 = parseInt(import_data[i].Y2004M01);
+        import_data[i].Y2004M02 = parseInt(import_data[i].Y2004M02);
+        import_data[i].Y2004M03 = parseInt(import_data[i].Y2004M03);
+        import_data[i].Y2004M04 = parseInt(import_data[i].Y2004M04);
+        import_data[i].Y2004M05 = parseInt(import_data[i].Y2004M05);
+        import_data[i].Y2004M06 = parseInt(import_data[i].Y2004M06);
+        import_data[i].Y2004M07 = parseInt(import_data[i].Y2004M07);
+        import_data[i].Y2004M08 = parseInt(import_data[i].Y2004M08);
+        import_data[i].Y2004M09 = parseInt(import_data[i].Y2004M09);
+        import_data[i].Y2004M10 = parseInt(import_data[i].Y2004M10);
+        import_data[i].Y2004M11 = parseInt(import_data[i].Y2004M11);
+        import_data[i].Y2004M12 = parseInt(import_data[i].Y2004M12);
+        import_data[i].Y2005M01 = parseInt(import_data[i].Y2005M01);
+        import_data[i].Y2005M02 = parseInt(import_data[i].Y2005M02);
+        import_data[i].Y2005M03 = parseInt(import_data[i].Y2005M03);
+        import_data[i].Y2005M04 = parseInt(import_data[i].Y2005M04);
+        import_data[i].Y2005M05 = parseInt(import_data[i].Y2005M05);
+        import_data[i].Y2005M06 = parseInt(import_data[i].Y2005M06);
+        import_data[i].Y2005M07 = parseInt(import_data[i].Y2005M07);
+        import_data[i].Y2005M08 = parseInt(import_data[i].Y2005M08);
+        import_data[i].Y2005M09 = parseInt(import_data[i].Y2005M09);
+        import_data[i].Y2005M10 = parseInt(import_data[i].Y2005M10);
+        import_data[i].Y2005M11 = parseInt(import_data[i].Y2005M11);
+        import_data[i].Y2005M12 = parseInt(import_data[i].Y2005M12);
+		import_data[i].Y2006M01 = parseInt(import_data[i].Y2006M01);
+        import_data[i].Y2006M02 = parseInt(import_data[i].Y2006M02);
+        import_data[i].Y2006M03 = parseInt(import_data[i].Y2006M03);
+        import_data[i].Y2006M04 = parseInt(import_data[i].Y2006M04);
+        import_data[i].Y2006M05 = parseInt(import_data[i].Y2006M05);
+        import_data[i].Y2006M06 = parseInt(import_data[i].Y2006M06);
+        import_data[i].Y2006M07 = parseInt(import_data[i].Y2006M07);
+        import_data[i].Y2006M08 = parseInt(import_data[i].Y2006M08);
+        import_data[i].Y2006M09 = parseInt(import_data[i].Y2006M09);
+        import_data[i].Y2006M10 = parseInt(import_data[i].Y2006M10);
+        import_data[i].Y2006M11 = parseInt(import_data[i].Y2006M11);
+        import_data[i].Y2006M12 = parseInt(import_data[i].Y2006M12);
+        import_data[i].Y2007M01 = parseInt(import_data[i].Y2007M01);
+        import_data[i].Y2007M02 = parseInt(import_data[i].Y2007M02);
+        import_data[i].Y2007M03 = parseInt(import_data[i].Y2007M03);
+        import_data[i].Y2007M04 = parseInt(import_data[i].Y2007M04);
+        import_data[i].Y2007M05 = parseInt(import_data[i].Y2007M05);
+        import_data[i].Y2007M06 = parseInt(import_data[i].Y2007M06);
+        import_data[i].Y2007M07 = parseInt(import_data[i].Y2007M07);
+        import_data[i].Y2007M08 = parseInt(import_data[i].Y2007M08);
+        import_data[i].Y2007M09 = parseInt(import_data[i].Y2007M09);
+        import_data[i].Y2007M10 = parseInt(import_data[i].Y2007M10);
+		import_data[i].Y2008M01 = parseInt(import_data[i].Y2008M01);
+        import_data[i].Y2008M02 = parseInt(import_data[i].Y2008M02);
+        import_data[i].Y2008M03 = parseInt(import_data[i].Y2008M03);
+        import_data[i].Y2008M04 = parseInt(import_data[i].Y2008M04);
+        import_data[i].Y2008M05 = parseInt(import_data[i].Y2008M05);
+        import_data[i].Y2008M06 = parseInt(import_data[i].Y2008M06);
+        import_data[i].Y2008M07 = parseInt(import_data[i].Y2008M07);
+        import_data[i].Y2008M08 = parseInt(import_data[i].Y2008M08);
+        import_data[i].Y2008M09 = parseInt(import_data[i].Y2008M09);
+        import_data[i].Y2008M10 = parseInt(import_data[i].Y2008M10);
+        import_data[i].Y2008M11 = parseInt(import_data[i].Y2008M11);
+        import_data[i].Y2008M12 = parseInt(import_data[i].Y2008M12);
+        import_data[i].Y2009M01 = parseInt(import_data[i].Y2009M01);
+        import_data[i].Y2009M02 = parseInt(import_data[i].Y2009M02);
+        import_data[i].Y2009M03 = parseInt(import_data[i].Y2009M03);
+        import_data[i].Y2009M04 = parseInt(import_data[i].Y2009M04);
+        import_data[i].Y2009M05 = parseInt(import_data[i].Y2009M05);
+        import_data[i].Y2009M06 = parseInt(import_data[i].Y2009M06);
+        import_data[i].Y2009M07 = parseInt(import_data[i].Y2009M07);
+        import_data[i].Y2009M08 = parseInt(import_data[i].Y2009M08);
+        import_data[i].Y2009M09 = parseInt(import_data[i].Y2009M09);
+        import_data[i].Y2009M10 = parseInt(import_data[i].Y2009M10);
+        import_data[i].Y2009M11 = parseInt(import_data[i].Y2009M11);
+        import_data[i].Y2009M12 = parseInt(import_data[i].Y2009M12);
+        import_data[i].Y2010M01 = parseInt(import_data[i].Y2010M01);
+        import_data[i].Y2010M02 = parseInt(import_data[i].Y2010M02);
+        import_data[i].Y2010M03 = parseInt(import_data[i].Y2010M03);
+        import_data[i].Y2010M04 = parseInt(import_data[i].Y2010M04);
+        import_data[i].Y2010M05 = parseInt(import_data[i].Y2010M05);
+        import_data[i].Y2010M06 = parseInt(import_data[i].Y2010M06);
+        import_data[i].Y2010M07 = parseInt(import_data[i].Y2010M07);
+        import_data[i].Y2010M08 = parseInt(import_data[i].Y2010M08);
+        import_data[i].Y2010M09 = parseInt(import_data[i].Y2010M09);
+        import_data[i].Y2010M10 = parseInt(import_data[i].Y2010M10);
+        import_data[i].Y2010M11 = parseInt(import_data[i].Y2010M11);
+        import_data[i].Y2010M12 = parseInt(import_data[i].Y2010M12);
+        import_data[i].Y2011M01 = parseInt(import_data[i].Y2011M01);
+        import_data[i].Y2011M02 = parseInt(import_data[i].Y2011M02);
+        import_data[i].Y2011M03 = parseInt(import_data[i].Y2011M03);
+        import_data[i].Y2011M04 = parseInt(import_data[i].Y2011M04);
+        import_data[i].Y2011M05 = parseInt(import_data[i].Y2011M05);
+        import_data[i].Y2011M06 = parseInt(import_data[i].Y2011M06);
+        import_data[i].Y2011M07 = parseInt(import_data[i].Y2011M07);
+        import_data[i].Y2011M08 = parseInt(import_data[i].Y2011M08);
+        import_data[i].Y2011M09 = parseInt(import_data[i].Y2011M09);
+        import_data[i].Y2011M10 = parseInt(import_data[i].Y2011M10);
+        import_data[i].Y2011M11 = parseInt(import_data[i].Y2011M11);
+        import_data[i].Y2011M12 = parseInt(import_data[i].Y2011M12);
+	    import_data[i].Y2012M01 = parseInt(import_data[i].Y2012M01);
+        import_data[i].Y2012M02 = parseInt(import_data[i].Y2012M02);
+        import_data[i].Y2012M03 = parseInt(import_data[i].Y2012M03);
+        import_data[i].Y2012M04 = parseInt(import_data[i].Y2012M04);
+        import_data[i].Y2012M05 = parseInt(import_data[i].Y2012M05);
+        import_data[i].Y2012M06 = parseInt(import_data[i].Y2012M06);
+        import_data[i].Y2012M07 = parseInt(import_data[i].Y2012M07);
+        import_data[i].Y2012M08 = parseInt(import_data[i].Y2012M08);
+        import_data[i].Y2012M09 = parseInt(import_data[i].Y2012M09);
+        import_data[i].Y2012M10 = parseInt(import_data[i].Y2012M10);
+        import_data[i].Y2012M11 = parseInt(import_data[i].Y2012M11);
+        import_data[i].Y2012M12 = parseInt(import_data[i].Y2012M12);
+        import_data[i].Y2013M01 = parseInt(import_data[i].Y2013M01);
+        import_data[i].Y2013M02 = parseInt(import_data[i].Y2013M02);
+        import_data[i].Y2013M03 = parseInt(import_data[i].Y2013M03);
+        import_data[i].Y2013M04 = parseInt(import_data[i].Y2013M04);
+        import_data[i].Y2013M05 = parseInt(import_data[i].Y2013M05);
+        import_data[i].Y2013M06 = parseInt(import_data[i].Y2013M06);
+        import_data[i].Y2013M07 = parseInt(import_data[i].Y2013M07);
+        import_data[i].Y2013M08 = parseInt(import_data[i].Y2013M08);
+        import_data[i].Y2013M09 = parseInt(import_data[i].Y2013M09);
+        import_data[i].Y2013M10 = parseInt(import_data[i].Y2013M10);
+        import_data[i].Y2013M11 = parseInt(import_data[i].Y2013M11);
+        import_data[i].Y2013M12 = parseInt(import_data[i].Y2013M12);
+        import_data[i].Y2014M01 = parseInt(import_data[i].Y2014M01);
+        import_data[i].Y2014M02 = parseInt(import_data[i].Y2014M02);
+        import_data[i].Y2014M03 = parseInt(import_data[i].Y2014M03);
+        import_data[i].Y2014M04 = parseInt(import_data[i].Y2014M04);
+        import_data[i].Y2014M05 = parseInt(import_data[i].Y2014M05);
+        import_data[i].Y2014M06 = parseInt(import_data[i].Y2014M06);
+        import_data[i].Y2014M07 = parseInt(import_data[i].Y2014M07);
+        import_data[i].Y2014M08 = parseInt(import_data[i].Y2014M08);
+        import_data[i].Y2014M09 = parseInt(import_data[i].Y2014M09);
+        import_data[i].Y2014M10 = parseInt(import_data[i].Y2014M10);
+        import_data[i].Y2014M11 = parseInt(import_data[i].Y2014M11);
+        import_data[i].Y2014M12 = parseInt(import_data[i].Y2014M12);
+        import_data[i].Y2015M01 = parseInt(import_data[i].Y2015M01);
+        import_data[i].Y2015M02 = parseInt(import_data[i].Y2015M02);
+        import_data[i].Y2015M03 = parseInt(import_data[i].Y2015M03);
+        import_data[i].Y2015M04 = parseInt(import_data[i].Y2015M04);
+        import_data[i].Y2015M05 = parseInt(import_data[i].Y2015M05);
+        import_data[i].Y2015M06 = parseInt(import_data[i].Y2015M06);
+        import_data[i].Y2015M07 = parseInt(import_data[i].Y2015M07);
+        import_data[i].Y2015M08 = parseInt(import_data[i].Y2015M08);
+        import_data[i].Y2015M09 = parseInt(import_data[i].Y2015M09);
+        import_data[i].Y2015M10 = parseInt(import_data[i].Y2015M10);
+        import_data[i].Y2015M11 = parseInt(import_data[i].Y2015M11);
+        import_data[i].Y2015M12 = parseInt(import_data[i].Y2015M12);		
+	}
+	var trade_data=[
+	{"contry": "香港","export": 101013,"import":2807,"group":"亞洲"},
+	{"contry": "印尼","export":7037,"import":10386,"group":"亞洲"},
+	{"contry": "日本","export":47805,"import":105537,"group":"亞洲"},
+ 　	{"contry": "韓國","export":28705,"import":33812,"group":"亞洲"},
+ 　	{"contry": "中國大陸","export":182100,"import":121294,"group":"亞洲"},
+ 　	{"contry": "馬來西亞","export":18901,"import":16056,"group":"亞洲"},
+ 　	{"contry": "新加坡","export":40604,"import":15662,"group":"亞洲"},
+ 　	{"contry": "泰國","export":13137,"import":10127,"group":"亞洲"},
+ 　	{"contry": "越南","export":24542,"import":6481,"group":"亞洲"},
+
+ 　	{"contry": "科威特","export":451,"import":9005,"group":"中東"},
+ 　	{"contry": "沙烏地阿拉伯","export":4285,"import":17147,"group":"中東"},
+
+ 　	{"contry": "法國","export":3640,"import":7599,"group":"歐洲"},
+ 　	{"contry": "德國","export":16796,"import":21211,"group":"歐洲"},
+ 　	{"contry": "義大利","export":5676,"import":6012,"group":"歐洲"},
+ 　	{"contry": "英國,","export":10297,"import":4761,"group":"歐洲"},
+
+ 　	{"contry": "奈及利亞","export":402,"import":2,"group":"非洲"},
+
+ 　	{"contry": "加拿大","export":5985,"import":3005,"group":"北美洲"},
+ 　	{"contry": "美國","export":93121,"import":71826,"group":"北美洲"},
+
+ 　	{"contry": "墨西哥","export":5940,"import":1731,"group":"中美洲"},
+ 　	{"contry": "巴拿馬","export":377,"import":76,"group":"中美洲"},
+
+ 　	{"contry": "阿根廷","export":776,"import":277,"group":"南美洲"},
+ 　	{"contry": "巴西","export":2639,"import":5826,"group":"南美洲"},
+
+ 　	{"contry": "澳大利亞","export":7041,"import":13439,"group":"大洋洲"},
+ 　	{"contry": "紐西蘭","export":1088,"import":1629,"group":"大洋洲"}
+]*/
+	for (var i = 0; i < export_data.length; i++) {
+		export_data[i][date] = parseInt(export_data[i][date]);
+	}
+	var initial_visualization = d3plus.viz()
+    .container("#viz")
+    .data(export_data)
+    .type("tree_map")
+    .id(["group","contry"])
+    .size(date)
+    .draw()
+	
+
+	d3.selectAll("input").on("change", function change() {
+    type = this.value;
+	if(type=="export")
+	{
+		for (var i = 0; i < export_data.length; i++) {
+			export_data[i][date] = parseInt(export_data[i][date]);
+		}
+		var toggle_visualization = d3plus.viz()
+		.container("#viz")
+		.data(export_data)
+		.type("tree_map")
+		.id(["group","contry"])
+		.size(date)
+		.draw()
+	}
+	else
+	{
+		for (var i = 0; i < import_data.length; i++) {
+			import_data[i][date] = parseInt(import_data[i][date]);
+		}
+		var toggle_visualization = d3plus.viz()
+		.container("#viz")
+		.data(import_data)
+		.type("tree_map")
+		.id(["group","contry"])
+		.size(date)
+		.draw()	
+	}
+});
+
+//Timeline
+function createTimeLine() {
+    $("#slider-range-min-year").slider({
+        range: "min",
+        value: 2015,
+        min: 2000,
+        max: 2015,
+        slide: function( event, ui ) { //滾動時間時
+            $( "#year" ).val( ui.value );
+			changeYear(ui.value);
+        }
+    });
+    $("#year").val( $( "#slider-range-min-year" ).slider( "value" ) );
+	$("#slider-range-min-month").slider({
+        range: "min",
+        value: 12,
+        min: 1,
+        max: 12,
+        slide: function( event, ui ) { //滾動時間時
+            $( "#month" ).val( ui.value );
+			changeMonth(ui.value);
+        }
+    });
+    $("#month").val( $( "#slider-range-min-month" ).slider( "value" ) );
+};
+function changeYear(year) {
+	rYear = year;
+	date="Y"+rYear+"M"+rMonth;
+	if(type=="export")
+	{
+		for (var i = 0; i < export_data.length; i++) {
+			export_data[i][date] = parseInt(export_data[i][date]);
+		}
+		var new_visualization = d3plus.viz()
+		.container("#viz")
+		.data(export_data)
+		.type("tree_map")
+		.id(["group","contry"])
+		.size(date)
+		.draw()
+	}
+	else
+	{
+		for (var i = 0; i < import_data.length; i++) {
+			import_data[i][date] = parseInt(import_data[i][date]);
+		}
+		var new_visualization = d3plus.viz()
+		.container("#viz")
+		.data(import_data)
+		.type("tree_map")
+		.id(["group","contry"])
+		.size(date)
+		.draw()
+	}
+};
+function changeMonth(month) {
+	rMonth = month;
+	date="Y"+rYear+"M"+rMonth;
+	if(type=="export")
+	{
+		for (var i = 0; i < export_data.length; i++) {
+			export_data[i][date] = parseInt(export_data[i][date]);
+		}
+		var new_visualization = d3plus.viz()
+		.container("#viz")
+		.data(export_data)
+		.type("tree_map")
+		.id(["group","contry"])
+		.size(date)
+		.draw()
+	}
+	else
+	{
+		for (var i = 0; i < import_data.length; i++) {
+			import_data[i][date] = parseInt(import_data[i][date]);
+		}
+		var new_visualization = d3plus.viz()
+		.container("#viz")
+		.data(import_data)
+		.type("tree_map")
+		.id(["group","contry"])
+		.size(date)
+		.draw()
+	}
+};
+
+});
+});
+	
+
+
+</script>
